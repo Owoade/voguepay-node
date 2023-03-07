@@ -1,4 +1,4 @@
-# Lazerpay Ruby SDK
+# Voguepay Node SDK
 
 Node js SDK for Voguepay.
 
