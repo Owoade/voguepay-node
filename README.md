@@ -1,10 +1,10 @@
 # Lazerpay Ruby SDK
 
-Ruby SDK for lazerpay finance.
+Node js SDK for Voguepay.
 
 ### Installation
 
-Simply add this line to your application's Gemfile:
+Simply run this command
 
 ```
 npm install voguepay-node
