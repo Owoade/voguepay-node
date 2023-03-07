@@ -1,4 +1,4 @@
-interface PaymentInitPayload {
+export declare interface PaymentInitPayload {
     v_merchant_id: string;
     notify_url: string;
     total: number | string,
@@ -7,11 +7,9 @@ interface PaymentInitPayload {
     customer:PayingCustomer,
     merchant_ref?: string,
     developer_code?: string;
-    items?: object[]
-
 }
 
-interface PayingCustomer{
+export declare interface PayingCustomer{
     name: string,
     address: string,
     city: string,
@@ -20,4 +18,3 @@ interface PayingCustomer{
     email: string,
     phone: string
 }
-

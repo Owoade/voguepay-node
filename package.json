@@ -1,11 +1,30 @@
 {
   "name": "voguepay-node",
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "description": "",
+  "main": "index.js",
   "type": "module",
-  "author": "Owoade Anuoluwapo <owoadeanuoluwapo2@gmail.com>",
-  "repository": "git@github.com:Owoade/voguepay-node.git",
-  "license": "MIT",
   "dependencies": {
-    "axios": "^1.3.4"
+    "axios": "^1.2.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "tsc && cp package.json ./dist && cp ./src/index.ts ./src/index.d.ts -r ./dist && cp README.md ./dist",
+    "jsdoc": "jsdoc -c jsdoc.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Owoade/voguepay-node.git"
+  },
+  "keywords": ["voguepay", "payment", "node"],
+  "author": "Owoade Anuoluwapo <owoadeanuoluwapo2@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Owoade/voguepay-node/issues"
+  },
+  "homepage": "https://github.com/Owoade/voguepay-node#readme",
+  "devDependencies": {
+    "tslib": "^2.5.0",
+    "typescript": "^4.9.5"
   }
 }

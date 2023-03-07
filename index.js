@@ -1,5 +1,4 @@
 import axios from "axios";
-import { PaymentInitPayload } from "./index.d";
 
 
 export default class VoguePay {
@@ -17,7 +16,7 @@ export default class VoguePay {
     return e;
   }
 
-  static sortPayload( payload: PaymentInitPayload ){
+  static sortPayload( payload ){
     const _ =  {
       v_merchant_id: payload?.v_merchant_id ?? "",
       phone: payload?.customer?.phone ?? "",
@@ -27,8 +26,8 @@ export default class VoguePay {
       cur: payload?.cur ?? "",
       merchant_ref: payload?.merchant_ref ?? "",
       memo: payload?.memo ?? "",
-      recurrent: "null",
-      frequency: 0,
+      recurrent: payload?.recurrent ?? "",
+      frequency: payload?.frequency ?? "",
       developer_code: payload?.developer_code ?? "",
       store_id: "",
       name: payload?.customer?.name ?? "",
@@ -41,7 +40,7 @@ export default class VoguePay {
     return _
   }
 
-  static serialize(payload: PaymentInitPayload) {
+  static serialize(payload) {
     const SORTED_PAYLOAD = VoguePay.sortPayload(payload);
     const ENCODED_URI_ARR = Array.from(Object.keys(SORTED_PAYLOAD)).map(function (
       key
@@ -62,11 +61,34 @@ export default class VoguePay {
     );
   }
 
+  /**
+     * Initialize payment.
+     * @param {object} payload - Payment payload containing 
+     * ```js 
+     * Voguepay.init({
+        v_merchant_id: '1110-220123',
+        total: price,
+        notify_url:'https://example.com/notification.php',
+        cur: 'NGN',
+        merchant_ref: 2000,
+        memo:'Payment for Apple M1 Mac ',
+        developer_code: '7a61c272aed23',
+        customer: {
+          name: 'Customer name',
+          address: 'Customer address',
+          city: 'Customer city',
+          state: 'Customer state',
+          zipcode: 'Customer zip/post code',
+          email: 'owoadeanuoluwapo2@gmail.com',
+          phone: 'Customer phone'
+        }
+     * ```
+    */
  
-  static async init(payload: PaymentInitPayload) {
+  static async init(payload) {
 
     const URI = VoguePay.serialize(payload);
-  
+   
     try {
       const response = await axios.get(URI, {
         transformResponse: (r) => r,
@@ -89,3 +111,4 @@ export default class VoguePay {
   }
 
 }
+
