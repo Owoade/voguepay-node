@@ -18,13 +18,13 @@ npm install voguepay-node
             await Voguepay.init({
                 v_merchant_id: '9814-0123983',
                 total: price,
-                notify_url:'https://pamsocial-api.onrender.com/web-hook/voguepay/payment',
+                notify_url:'https://example.com/notification.php',
                 cur: 'NGN',
                 merchant_ref: 'ref123',
-                memo:'Payment for '+item,
+                memo:'Payment for Apple M1',
                 developer_code: '5a61be72ab323',
                 customer: {
-                name: 'Owoade Anuoluwapo',
+                name: 'Customer name',
                 address: 'Customer address',
                 city: 'Customer city',
                 state: 'Customer state',
