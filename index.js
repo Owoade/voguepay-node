@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 export default class VoguePay {
-  static base_url = "https://pay.voguepay.com/?p=pay&";
+  static base_url = "https://pay.voguepay.com/";
 
   static generateId() {
     for (
@@ -26,8 +26,8 @@ export default class VoguePay {
       cur: payload?.cur ?? "",
       merchant_ref: payload?.merchant_ref ?? "",
       memo: payload?.memo ?? "",
-      recurrent: payload?.recurrent ?? "",
-      frequency: payload?.frequency ?? "",
+      recurrent: "null",
+      frequency: 0,
       developer_code: payload?.developer_code ?? "",
       store_id: "",
       name: payload?.customer?.name ?? "",
@@ -40,28 +40,55 @@ export default class VoguePay {
     return _
   }
 
-  static serialize(payload) {
-    const SORTED_PAYLOAD = VoguePay.sortPayload(payload);
-    const ENCODED_URI_ARR = Array.from(Object.keys(SORTED_PAYLOAD)).map(function (
-      key
-    ) {
-      const ENCODED_KEY = encodeURIComponent(key);
-      const ENCODED_VALUE = encodeURIComponent(SORTED_PAYLOAD[key])
-        
-      const _ = `${ENCODED_KEY}=${ENCODED_VALUE}&`;
+  static enncodePayload(payload ){
+    const ENCODED_URI_ARR = Array.from(Object.keys(payload)).map(function (
+        key
+      ) {
+        const ENCODED_KEY = encodeURIComponent(key);
+        const ENCODED_VALUE = encodeURIComponent(payload[key])
+          
+        const _ = `${ENCODED_KEY}=${ENCODED_VALUE}&`;
+  
+        return _;
+      });
+    
+    return ENCODED_URI_ARR.join("").slice(0, -1);
+  }
 
-      return _;
-    });
+  static serialize( payload ) {
+    const SORTED_PAYLOAD = VoguePay.sortPayload(payload);
+    const ENCODED_URI = VoguePay.enncodePayload(SORTED_PAYLOAD)
   
     const id = VoguePay.generateId();
 
     return (
-      `${VoguePay.base_url}id=${id}&webload=${id}&` +
-      ENCODED_URI_ARR.join("").slice(0, -1)
+      `${VoguePay.base_url}?p=pay&id=${id}&webload=${id}&` +
+      ENCODED_URI
     );
   }
 
-  /**
+  static payloadToQueryParams( payload ){
+    const PARAMS_ARR = Array.from(Object.keys(payload)).map(function (
+        key
+      ) {
+        const KEY = key;
+        const VALUE = payload[key];
+          
+        const _ = `${KEY}=${VALUE}&`;
+  
+        return _;
+      });
+    
+    return "?" + PARAMS_ARR.join("").slice(0, -1);
+  }
+
+  static getIdFromLink( link ){
+    if( link.includes("?error=") ) return "";
+
+    return link.split("uid%22%3A%")[1].split("%22%7D")[0];
+  }
+
+   /**
      * Initialize payment.
      * @param {object} payload - Payment payload containing 
      * ```js 
@@ -85,19 +112,22 @@ export default class VoguePay {
      * ```
     */
  
-  static async init(payload) {
+  static async init( payload ) {
 
     const URI = VoguePay.serialize(payload);
-   
+  
     try {
       const response = await axios.get(URI, {
         transformResponse: (r) => r,
         headers: { Referer: "https://www.pamsocial.app" },
       });
 
+      const link = response.data.trim().split(`<iframe src="`)[1].split(`"`)[0];
+
       return {
         status: "success",
-        link: response.data.trim().split(`<iframe src="`)[1].split(`"`)[0],
+        link,
+        transaction_id: this.getIdFromLink(link)
       };
     } catch (e) {
       return {
@@ -106,9 +136,28 @@ export default class VoguePay {
           .trim()
           .split(`<iframe src="`)[1]
           .split(`"`)[0],
+        transaction_id: ""
       };
     }
   }
 
+  static async getTransaction( id ){
+    const payload = {
+        v_transaction_id: id,
+        v_merchant_id: merchant_id,
+        type: "json"
+    }
+
+    const QUERY_PARAMS = VoguePay.payloadToQueryParams( payload );
+
+    const URI = VoguePay.base_url + QUERY_PARAMS;
+
+    const response = await axios.get(URI);
+
+    return response.data;
+
+  }
+
 }
 
+ 

@@ -37,6 +37,20 @@ npm install voguepay-node
 
 ```
 
+### Get a Transaction 📄
+
+```js
+    import VoguePay from "voguepay-node"
+
+    (async function(){
+            await Voguepay.getTransaction( transaction_id, merchant_id )
+    })();
+
+```
+
+
+
+
 ⚠️ This SDK doesn't support typescript yet. However jsdocs are in place to guide you on the contents of the payload.
 
 ### Contributing
