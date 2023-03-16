@@ -85,7 +85,7 @@ export default class VoguePay {
   static getIdFromLink( link ){
     if( link.includes("?error=") ) return "";
 
-    return link.split("uid%22%3A%")[1].split("%22%7D")[0];
+    return link.split("uid%22%3A%22")[1].split("%22%7D")[0];
   }
 
    /**
@@ -141,7 +141,7 @@ export default class VoguePay {
     }
   }
 
-  static async getTransaction( id ){
+  static async getTransaction( id, merchant_id ){
     const payload = {
         v_transaction_id: id,
         v_merchant_id: merchant_id,
