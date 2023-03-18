@@ -16,7 +16,7 @@ npm install voguepay-node
 
     (async function(){
             await Voguepay.init({
-                v_merchant_id: '9814-0123983',
+                v_merchant_id: '1234-561342',
                 total: price,
                 notify_url:'https://example.com/notification.php',
                 cur: 'NGN',
